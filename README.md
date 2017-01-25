@@ -7,17 +7,16 @@ indexes removed:
 
 ```
 $ ls
-
 GRCh37-subset.fa    HG00096.bam        HG00533.bam        HG00534.bam        chr1.vcf.gz        chr2.vcf.gz        chr3.vcf.gz
 ```
 
-One can build the docker from this repo directory as follows:
+One can build the docker from this repo as follows:
 
 ```
 docker build -t ga4gh_directory .
 ```
 
-and in the directory, create the necessary indices and the `registry.db` file: (Note: the scripts currently
+and in the data directory, create the necessary indices and the `registry.db` file: (Note: the scripts currently
 assume that the mounted data directory is _always_ `/data`)
 
 ```
@@ -45,7 +44,7 @@ GRCh37-subset.fa.gz.fai HG00096.bam.bai  HG00534.bam       chr1.vcf.gz.tbi    ch
 GRCh37-subset.fa.gz.gzi HG00533.bam      HG00534.bam.bai   chr2.vcf.gz        chr3.vcf.gz.tbi
 ```
 
-From this same directory, we can start up a ga4gh server, as well as serving the files themselves:
+From this same directory, we can now start up a ga4gh server, as well as serving the files themselves:
 
 ```
 $ docker run -d -v ${PWD}:/data -p 8000:80 ga4gh_directory serve
