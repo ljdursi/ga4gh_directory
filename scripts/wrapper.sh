@@ -25,7 +25,7 @@ case $COMMAND in
 		"${EXECUTABLE_PATH}/create_repo.sh" "${@:2}"
 		;;
 	"serve")
-		"${EXECUTABLE_PATH}/serve.sh" "${@:2}"
+        exec apachectl -DFOREGROUND "${@:2}"
 		;;
 	*)
 		>&2 echo "Invalid command: $COMMAND"

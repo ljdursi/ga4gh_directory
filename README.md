@@ -17,7 +17,8 @@ One can build the docker from this repo directory as follows:
 docker build -t ga4gh_directory .
 ```
 
-and in the directory, create the necessary indices and the `registry.db` file:
+and in the directory, create the necessary indices and the `registry.db` file: (Note: the scripts currently
+assume that the mounted data directory is _always_ `/data`)
 
 ```
 $ docker run -v ${PWD}:/data ga4gh_directory init /data/GRCh37-subset.fa /data/
@@ -60,5 +61,5 @@ $ curl http://localhost:8000/ga4gh/ --silent | grep GA4GH
     Welcome to the GA4GH reference server landing page! This page describes
 
 $ wget -nv http://localhost:8000/chr3.vcf.gz
-2017-01-25 00:42:15 URL:http://localhost:8000/chr3.vcf.gz [26967/26967] -> "chr3.vcf.gz.1" [1]
+2017-01-25 00:42:15 URL:http://localhost:8000/chr3.vcf.gz [26967/26967] -> "chr3.vcf.gz" [1]
 ```
