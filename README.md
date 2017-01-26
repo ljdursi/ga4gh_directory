@@ -10,13 +10,10 @@ $ ls
 GRCh37-subset.fa    HG00096.bam        HG00533.bam        HG00534.bam        chr1.vcf.gz        chr2.vcf.gz        chr3.vcf.gz
 ```
 
-One can build the docker from this repo as follows:
+One can build the docker from this repo via `docker build -t ga4gh_directory .` or just pull the 
+prebuilt image with `docker pull quay.io/ljdursi/ga4gh_directory`.
 
-```
-docker build -t ga4gh_directory .
-```
-
-and in the data directory, create the necessary indices and the `registry.db` file: (Note: the scripts currently
+In the data directory, you can then create the necessary indices and the `registry.db` file as so: (Note: the scripts currently
 assume that the mounted data directory is _always_ `/data`)
 
 ```
