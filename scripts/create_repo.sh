@@ -21,7 +21,7 @@ function faidx {
     reference_gz="$reference"
 
     # bgzip if necessary
-    if [[ "$extention" == "gz" ]] || [[ -f "$reference.gz" ]]
+    if [[ "$extension" == "gz" ]] || [[ -f "$reference.gz" ]]
     then
         :
     else
@@ -42,6 +42,10 @@ function bamidx {
     then
         for bam in "${dir}"/*.bam
         do
+            if [[ ! -f "$bam" ]]
+            then
+                continue
+            fi
             if [[ ! -f "${bam}.bai" ]]
             then 
                 samtools index "${bam}"
@@ -57,6 +61,10 @@ function vcfidx {
     then
         for vcf in "${dir}"/*.vcf
         do
+            if [[ ! -f "${vcf}" ]]
+            then
+                continue
+            fi
             if [[ ! -f "${vcf}.gz" ]]
             then 
                 bgzip "${vcf}"
@@ -64,6 +72,10 @@ function vcfidx {
         done
         for vcfgz in "${dir}"/*.vcf.gz
         do
+            if [[ ! -f "${vcfgz}" ]]
+            then
+                continue
+            fi
             if [[ ! -f "${vcfgz}.tbi" ]]
             then 
                 tabix -p vcf "${vcfgz}"
@@ -106,7 +118,11 @@ function create_repo {
 
     for bamfile in "$datadir"/*.bam
     do
-        filebase=$( basename $bamfile | cut -f 1 -d . )
+        if [[ ! -f "${bamfile}" ]]
+        then
+            continue
+        fi
+        filebase=$( basename "$bamfile" | cut -f 1 -d . )
         ga4gh_repo add-readgroupset "$REPO" "$DATASETNAME" "$bamfile" --name "$filebase" --referenceSetName "$REFERENCENAME" 
     done
 }
