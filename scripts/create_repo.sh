@@ -21,7 +21,7 @@ function faidx {
     reference_gz="$reference"
 
     # bgzip if necessary
-    if [[ "$extension" == "gz" ]] || [[ -f "$reference.gz" ]]
+    if [[ "$extension" == "gz" ]] || [[ -f "$reference".gz ]]
     then
         :
     else
@@ -29,7 +29,7 @@ function faidx {
         reference_gz="$reference".gz
     fi
     # faidx if necessary
-    if [[ ! -f "$reference_gz".fa ]] 
+    if [[ ! -f "$reference_gz".fai ]] 
     then
         samtools faidx "$reference_gz"
     fi

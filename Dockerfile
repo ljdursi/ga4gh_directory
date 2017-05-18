@@ -5,6 +5,7 @@ LABEL Description="Start up a GA4GH server against on a directory"
 RUN apt-get update \
     && apt-get install -y \
         apache2 \
+        git \
         libapache2-mod-wsgi \
         libcurl4-openssl-dev \
         libffi-dev \
@@ -25,30 +26,12 @@ RUN a2enmod wsgi
 RUN mkdir /var/cache/apache2/python-egg-cache \
     && chown www-data:www-data /var/cache/apache2/python-egg-cache/
 
-RUN pip install ga4gh 
-
-RUN pip uninstall -y protobuf
-
-# get and install protobuf manually - first C++
-RUN cd /tmp \
-    && wget -nv --no-check-certificate https://github.com/google/protobuf/releases/download/v3.2.0/protobuf-python-3.2.0.zip \
-    && unzip protobuf-python-3.2.0.zip \
-    && rm -f protobuf-python-3.2.0.zip \
-    && cd protobuf-3.2.0 \
-    && ./configure \
-    && make \
-    && make check \
-    && make install \
-    && ldconfig 
-
-# and now python
-RUN cd /tmp/protobuf-3.2.0 \
-    && cd python \
-    && python setup.py build --cpp_implementation \
-    && python setup.py test --cpp_implementation \
-    && python setup.py install --cpp_implementation \
-    && cd /tmp \
-    && rm -rf protobuf-3.2.0
+RUN git clone https://github.com/ljdursi/ga4gh-server.git \
+    && cd ga4gh-server/ \
+    && git fetch \
+    && git checkout genotypes \
+    && pip install -r dev-requirements.txt -c constraints.txt \
+    && pip install . \
 
 # set up server directory
 RUN mkdir -p /srv/ga4gh 
