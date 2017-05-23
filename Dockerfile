@@ -1,4 +1,4 @@
-FROM ubuntu:16.10
+FROM ubuntu:17.04
 MAINTAINER Jonathan Dursi <jonathan@dursi.ca>
 LABEL Description="Start up a GA4GH server against on a directory"
 
@@ -31,10 +31,14 @@ RUN git clone https://github.com/ljdursi/ga4gh-server.git \
     && git fetch \
     && git checkout genotypes \
     && pip install -r dev-requirements.txt -c constraints.txt \
-    && pip install . \
+    && pip install . 
 
 # set up server directory
 RUN mkdir -p /srv/ga4gh 
+
+# work around broken ga4gh config in master
+RUN mkdir -p /srv/ga4gh/ga4gh/server/templates/ \
+    && touch /srv/ga4gh/ga4gh/server/templates/initial_peers.txt
 
 # copy config files
 COPY config/application.wsgi /srv/ga4gh/application.wsgi
