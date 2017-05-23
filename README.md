@@ -13,11 +13,10 @@ GRCh37-subset.fa    HG00096.bam        HG00533.bam        HG00534.bam        chr
 One can build the docker from this repo via `docker build -t ga4gh_directory .` or just pull the 
 prebuilt image with `docker pull quay.io/ljdursi/ga4gh_directory`.
 
-In the data directory, you can then create the necessary indices and the `registry.db` file as so: (Note: the scripts currently
-assume that the mounted data directory is _always_ `/data`)
+Above the data directory, you can then create the necessary indices and the `registry.db` file as so: (Note: the scripts currently assume that the mounted data directory is _always_ `/data`)
 
 ```
-$ docker run -v ${PWD}:/data ga4gh_directory init /data/GRCh37-subset.fa /data/
+$ docker run -v "${PWD}"/example_data:/data ga4gh_directory init /data/GRCh37-subset.fa /data/
 [bgzip] No such file or directory: /data//*.vcf
 Verifying ReferenceSet testref @ /data/GRCh37-subset.fa.gz
     Reading 1000 bases from 1
@@ -35,7 +34,7 @@ Verifying Dataset test
         Read 10 variants from reference 3 @ /data/chr3.vcf.gz
         Read 10 variants from reference 2 @ /data/chr2.vcf.gz
 
-$ ls
+$ ls example_data
 GRCh37-subset.fa.gz     HG00096.bam      HG00533.bam.bai   chr1.vcf.gz        chr2.vcf.gz.tbi     registry.db
 GRCh37-subset.fa.gz.fai HG00096.bam.bai  HG00534.bam       chr1.vcf.gz.tbi    chr3.vcf.gz
 GRCh37-subset.fa.gz.gzi HG00533.bam      HG00534.bam.bai   chr2.vcf.gz        chr3.vcf.gz.tbi
@@ -44,12 +43,13 @@ GRCh37-subset.fa.gz.gzi HG00533.bam      HG00534.bam.bai   chr2.vcf.gz        ch
 From this same directory, we can now start up a ga4gh server, as well as serving the files themselves:
 
 ```
-$ docker run -d -v ${PWD}:/data -p 8000:80 ga4gh_directory serve
+$ docker run -d -v "${PWD}"/example_data:/data -v /tmp:/var/log/apache2 -p 8000:80 ga4gh_directory serve
 288fe71273c65d746e506c5a9ef06a29964535043adf3a4fa8550f05556a7c0a
 
+$
 ```
 
-and from another terminal in another directory:
+and then:
 ```
 $ curl http://localhost:8000/ga4gh/ --silent | grep GA4GH
         <title>GA4GH reference server 0.3.5</title>
