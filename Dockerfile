@@ -47,4 +47,7 @@ COPY config/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 COPY scripts/* /usr/local/bin/
 
+## fix security issues w/ bash 4.4-ubuntu1
+RUN apt-get install --only-upgrade bash
+
 ENTRYPOINT ["/usr/local/bin/wrapper.sh"]
